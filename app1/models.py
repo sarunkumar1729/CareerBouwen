@@ -14,4 +14,5 @@ class profile(models.Model):
     Education=models.CharField(max_length=255)
     skills=models.CharField(max_length=255)
     certifications=models.CharField(max_length=255)
-
+    class Meta:
+        app_label='app1'

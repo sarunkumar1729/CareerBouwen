@@ -4,45 +4,85 @@
 
 {% block content1 %}
     <link rel="stylesheet" href="{% static 'styles/register.css' %}">
-    <form>
-
+    <!-- ajax link  -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <form method="POST" action="{% url 'register' %}">
+    {% csrf_token %}
     <div class="form-group">
         <label for="exampleInputUsername">Username</label>
-        <input name="username" type="text" class="form-control" id="exampleInputUsername" aria-describedby="userNameHelp" placeholder="Enter username">
-    </div>
+        <input name="username" type="text" onkeyup="checkUsernameAvailability()" class="form-control" id="username" aria-describedby="userNameHelp" placeholder="Enter username" required>
+        <span id="usernameMessage"></span>
+      </div>
 
     <div class="form-group">
         <label for="exampleInputFirstname">Firstname</label>
-        <input name="firstName" type="text" class="form-control" id="exampleInputFirstname" aria-describedby="firstnameHelp" placeholder="Enter first name">
+        <input name="firstName" type="text" class="form-control" id="firstname" aria-describedby="firstnameHelp" placeholder="Enter first name" required>
     </div>
 
     <div class="form-group">
         <label for="exampleInputLastname">Lastname</label>
-        <input name="lastName" type="text" class="form-control" id="exampleInputLastname" aria-describedby="lastNameHelp" placeholder="Enter last name">
+        <input name="lastName" type="text" class="form-control" id="lastname" aria-describedby="lastNameHelp" placeholder="Enter last name" required>
     </div>
 
     <div class="form-group">
       <label for="exampleInputEmail1">Email address</label>
-      <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+      <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" required>
       <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
     </div>
 
     <div class="form-group">
       <label for="exampleInputPassword1">Password</label>
-      <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+      <input name="password" type="password" class="form-control" id="password" placeholder="Password" required>
     </div>
 
     <div class="form-group">
         <label for="exampleInputPassword1">Password</label>
-        <input name="password1" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        <input name="password1" type="password" class="form-control" id="confirmPassword" placeholder="Password" required>
     </div>
 
     <div class="form-check">
-      <input name="terms" type="checkbox" class="form-check-input" id="exampleCheck1">
+      <input name="terms" type="checkbox" class="form-check-input" id="agree">
       <label class="form-check-label" for="exampleCheck1">Check me out</label>
     </div>
 
     <button type="submit" class="btn btn-primary">Submit</button>
 
     </form>
+
+    <script>
+      function checkUsernameAvailability() {
+            const username = document.getElementById("username").value;
+            const usernameMessage = document.getElementById("usernameMessage");
+
+            if (username.length < 3) {
+                usernameMessage.textContent = 'Username is too short.';
+                usernameMessage.style.color='red';
+                return;
+            }
+
+            // Make an AJAX request to check username availability
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `/check_username/?username=${username}`, true);
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        const data = JSON.parse(xhr.responseText);
+                        if (data.exists) {
+                            usernameMessage.textContent = 'Username is already taken.';
+                            usernameMessage.style.color='red';
+                        } else {
+                            usernameMessage.textContent = 'Username is available.';
+                            usernameMessage.style.color='green';
+                        }
+                    } else {
+                        console.error('An error occurred:', xhr.status, xhr.statusText);
+                        usernameMessage.textContent = 'Error checking username availability.';
+                    }
+                }
+            };
+
+            xhr.send();
+      }
+    </script>
 {% endblock %}
