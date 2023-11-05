@@ -14,8 +14,12 @@
         <div>
         <ul>
             <li><a href="{% url 'index' %}">HOME</a></li>
-            <li><a href="{% url 'login' %}">LOGIN</a></li>
+            {% if not user.is_authenticated %}
+            <li><a href="{% url 'userlogin' %}">LOGIN</a></li>
             <li><a href="{% url 'register' %}">REGISTER</a></li>
+            {% else %}
+            <li><a href="{% url 'userlogout' %}">LOGOUT</a></li>
+            {% endif %}
         </ul>
         <h1>CAREER BOUWEN</h1>
 
