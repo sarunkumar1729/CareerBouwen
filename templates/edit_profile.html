@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content1 %}
+
+    <h2>PROFILE</h2>
+    <form action="{% url 'profile' %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="currentAddress">Current address</label>
+            <input type="text" class="form-control" name="currentAddress" id="currentAddress"  placeholder="current address">
+        </div>
+        <div class="form-group">
+            <label for="permanantAddress">Permanant address</label>
+            <input type="text" class="form-control" name="permanantAddress" id="permanantAddress"  placeholder="permanant address">
+        </div>
+        <div class="form-group">
+            <label for="phone1">Phone 1</label>
+            <input type="text" class="form-control" name="phone1" id="phone1"  placeholder="phone">
+        </div>
+        <div class="form-group">
+            <label for="phone2">Phone 2</label>
+            <input type="text" class="form-control" name="phone2" id="phone2"  placeholder="phone">
+        </div>
+        <div class="form-group">
+            <label for="photo">Upload photo</label>
+            <input type="file" class="form-control" name="photo" id="photo">
+        </div>
+        <div class="form-group">
+            <label>Highest qualification</label>
+            <select name="education" id="education">
+              <option selected>Choose...</option>
+              <option value="Phd">Phd</option>
+              <option value="Mtech">Mtech</option>
+              <option value="Btech">Btech</option>
+              <option value="Msc">Msc</option>
+              <option value="Bsc">Bsc</option>
+              <option value="Diploma">Diploma</option>
+              <option value="+2">+2</option>
+              <option value="SSLC">SSLC</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="skills">skills</label>
+            <input type="text" class="form-control" name="skills" id="skills"  placeholder="python,html,css.....">
+        </div>
+        <div class="form-group">
+            <label for="resume">Upload resume</label>
+            <input type="file" class="form-control" name="resume" id="resume">
+        </div>
+        <input type="submit" class="btn btn-primary">
+    </form>
+
+{% endblock %}

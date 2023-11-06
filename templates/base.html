@@ -18,6 +18,7 @@
             <li><a href="{% url 'userlogin' %}">LOGIN</a></li>
             <li><a href="{% url 'register' %}">REGISTER</a></li>
             {% else %}
+            <li><a href="{% url 'profile' %}">PROFILE</a></li>
             <li><a href="{% url 'userlogout' %}">LOGOUT</a></li>
             {% endif %}
         </ul>

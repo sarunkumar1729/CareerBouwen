@@ -2,6 +2,8 @@ from django.shortcuts import render,redirect
 from django.http import JsonResponse
 from .models import User
 from django.contrib.auth import authenticate,login,logout
+from .models import UserProfile
+from django.http import FileResponse
 
 # Create your views here.
 
@@ -15,8 +17,6 @@ def register(request):
         lastname=request.POST['lastName']
         email=request.POST['email']
         password=request.POST['password']
-        confirmPassword=request.POST['password1']
-        # print(username,firstname,lastname,email,password,confirmPassword)
         user=User.objects.create_user(username=username,first_name=firstname,last_name=lastname,email=email,password=password)
         user.save()
         print('success')
@@ -50,3 +50,41 @@ def check_username(request):
             return JsonResponse({'exists': user_exists})
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+def profile(request):
+    if request.method=='POST':
+        permanantAddress=request.POST['permanantAddress']
+        currentAddress=request.POST['currentAddress']
+        phone1=request.POST['phone1']
+        phone2=request.POST['phone2']
+        photo=request.FILES.get('photo')
+        education=request.POST['education']
+        skills=request.POST['skills']
+        resume=request.FILES.get('resume')
+        user=request.user
+        # print(permanantAddress,currentAddress,phone1,phone2,photo,education,skills,resume)
+        new_profile=UserProfile(
+            profile_user=user,
+            current_address=currentAddress,
+            permanant_address=permanantAddress,
+            phone1=phone1,
+            phone2=phone2,
+            photo=photo,
+            Education=education,
+            skills=skills,
+            resume=resume
+        )
+        new_profile.save()
+        print('success')
+        return redirect('index')
+    else:
+        user=request.user
+        profile=UserProfile.objects.get(profile_user=user)
+        return render(request,'profile.html',{"profile":profile})
+
+
+def edit_profile(request):
+    if request.method=='POST':
+        pass
+    else:
+        return render(request,'edit_profile.html')
